@@ -1,0 +1,14 @@
+build
+dist/
+.idea
+.classpath
+.metadata/*
+.project
+.settings/*
+RemoteSystemsTempFiles/*
+bin/*
+data/*
+/bin/
+target/
+classes/
+jo/
