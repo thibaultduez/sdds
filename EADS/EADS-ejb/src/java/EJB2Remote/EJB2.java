@@ -53,7 +53,7 @@ public class EJB2 implements EJB2Remote {
     @Override
     public void closeEntityManagers() {
         em.close();
-        //emf.close();
+        emf.close();
     }
 
     @Override
