@@ -33,8 +33,12 @@ public class EJB2 implements EJB2Remote {
 
     @Override
     @RolesAllowed("client")
-    public List<Comptes> getComptesClient(BigDecimal clientId) {
-        return (List<Comptes>) em.createNamedQuery("Comptes.findByRefClient").setParameter("ref_client", clientId).getSingleResult();
+    public List<Comptes> getComptesClient() {
+        Principal callerPrincipal = context.getCallerPrincipal();
+        String login = callerPrincipal.getName();
+        Clients cli = (Clients) em.createNamedQuery("Clients.findByLogin").setParameter("login", login).getSingleResult();
+        return cli.getComptesList();
+        //return (List<Comptes>) em.createNamedQuery("Comptes.findByRefClient").setParameter("ref_client", clientId).getSingleResult();
     }
 
     @Override

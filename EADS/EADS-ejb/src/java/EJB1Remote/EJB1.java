@@ -23,7 +23,12 @@ import javax.persistence.Persistence;
 @Stateless
 //@DeclareRoles("superviseur")
 public class EJB1 implements EJB1Remote {
-/*
+
+    @Override
+    public boolean demandeCredit(long montant, long taux, long duree, java.util.List salaires, long chargeActuelle) {
+        return false;
+    }
+    /*
     @Override
     @RolesAllowed("employe")
     public List<Comptes> getComptesClient(BigDecimal clientId) {

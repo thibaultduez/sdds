@@ -17,7 +17,7 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface EJB2Remote {
-    List<Comptes> getComptesClient(BigDecimal clientId);
+    List<Comptes> getComptesClient();
 
     Clients verifLogin();
 

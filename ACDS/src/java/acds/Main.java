@@ -5,24 +5,19 @@
  */
 package acds;
 
-import EJB1Remote.EJB1Remote;
 import EJB2Remote.EJB2Remote;
 import entities.Clients;
-import entities.Comptes;
-import java.math.BigDecimal;
-import java.util.List;
 import javax.ejb.EJB;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author thibault
  */
 public class Main {
-
     @EJB
     private static EJB2Remote eJB2;
 
-    
     /**
      * @param args the command line arguments
      */
@@ -32,8 +27,8 @@ public class Main {
             ClientGUI clientGUI = new ClientGUI(client, eJB2);
             clientGUI.setVisible(true);
         } else {
+            JOptionPane.showMessageDialog(null, "Vous n'avez pas entré un bon login !", "Mauvais login" , JOptionPane.INFORMATION_MESSAGE);
             eJB2.closeEntityManagers();
         }   
     }
-    
 }

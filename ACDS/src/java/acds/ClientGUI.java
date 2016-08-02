@@ -9,8 +9,9 @@ import EJB2Remote.EJB2Remote;
 import entities.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import javax.ejb.EJB;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -38,7 +39,7 @@ public class ClientGUI extends javax.swing.JFrame {
         mesComptesSourceCB.setModel(new DefaultComboBoxModel(client.getComptesList().toArray()));
         mesComptesDestinationCB.setModel(new DefaultComboBoxModel(client.getComptesList().toArray()));
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -215,7 +216,17 @@ public class ClientGUI extends javax.swing.JFrame {
                 compteDestination = BigDecimal.valueOf(Long.parseLong(autreCompteTF.getText()));
             }
 
-            eJB2.transfert(compteSource, compteDestination, montant);
+            if(eJB2.transfert(compteSource, compteDestination, montant))
+            {
+                List<Comptes> comptes = eJB2.getComptesClient();
+                mesComptesSourceCB.setModel(new DefaultComboBoxModel(comptes.toArray()));
+                mesComptesDestinationCB.setModel(new DefaultComboBoxModel(comptes.toArray()));
+                montantTF.setText("");
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Erreur lors du transfert, solde insuffisant ou compte inexistant", "Erreur transfert" , JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }//GEN-LAST:event_transfererButtonActionPerformed
 
