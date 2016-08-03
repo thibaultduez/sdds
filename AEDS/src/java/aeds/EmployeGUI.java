@@ -10,15 +10,33 @@ import entities.Comptes;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.jms.Connection;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageListener;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.jms.Topic;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author kevinschorkops
  */
-public class EmployeGUI extends javax.swing.JFrame {
+public class EmployeGUI extends javax.swing.JFrame implements MessageListener{
 
     private EJB1Remote eJB1;
+    
+    private Topic topic;
+    private Connection connection;
+    private Session session;
+    
+    private MessageProducer producer;
+    private MessageConsumer consumer;
 
     /**
      * Creates new form EmployeGUI
@@ -27,9 +45,21 @@ public class EmployeGUI extends javax.swing.JFrame {
         initComponents();
     }
 
-    public EmployeGUI(EJB1Remote eJB1) {
+    public EmployeGUI(EJB1Remote eJB1, Topic topic, Connection connection, Session session) {
         initComponents();
         this.eJB1 = eJB1;
+        
+        this.topic = topic;
+        this.connection = connection;
+        this.session = session;
+        
+        try {
+            consumer = session.createConsumer(topic, "toEmploye");
+            consumer.setMessageListener(this);
+            producer = session.createProducer(topic);
+        } catch(JMSException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -243,4 +273,14 @@ public class EmployeGUI extends javax.swing.JFrame {
     private javax.swing.JLabel tauxLabel;
     private javax.swing.JTextField tauxTF;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void onMessage(Message message) {
+        try {
+            TextMessage tm = (TextMessage) message;
+            System.out.println("BLBLBLBL : " + tm.getText());
+        } catch (JMSException ex) {
+            Logger.getLogger(EmployeGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
