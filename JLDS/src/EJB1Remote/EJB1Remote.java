@@ -17,9 +17,7 @@ import javax.ejb.Remote;
 @Remote
 public interface EJB1Remote {
 
-    //List<Comptes> getComptesClient(BigDecimal clientId);
-
-    boolean demandeCredit(long montant, long taux, long duree, java.util.List salaires, long chargeActuelle);
+    boolean demandeCredit(double montant, double tauxAnnuel, int duree, double salaires, double chargeActuelle);
 
     void loginEmploye();
     

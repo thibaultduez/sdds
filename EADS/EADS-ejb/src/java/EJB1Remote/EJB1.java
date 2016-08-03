@@ -21,41 +21,43 @@ import javax.persistence.Persistence;
  * @author thibault
  */
 @Stateless
-//@DeclareRoles("superviseur")
+@DeclareRoles({"superviseur", "employe"})
 public class EJB1 implements EJB1Remote {
 
     @Override
-    public boolean demandeCredit(long montant, long taux, long duree, java.util.List salaires, long chargeActuelle) {
-        return false;
-    }
-    /*
-    @Override
-    @RolesAllowed("employe")
-    public List<Comptes> getComptesClient(BigDecimal clientId) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JLDSPU");
-        EntityManager em = emf.createEntityManager();
-        
-        em.getTransaction().begin();
-        
-        try {
-            Clients client = new Clients ();
-            //client.setId(BigDecimal.TEN);
-            client.setNom("test");
-            client.setPrenom("bibi");
-            client.setLogin("sssss");
-            em.persist(client);
-            em.getTransaction().commit();
-            //Clients client2 = em.find(Clients.class, BigDecimal.valueOf(51));
-            //System.out.println(client2.toString());
-        } catch(Exception e) {
-            e.printStackTrace();
-            em.getTransaction().rollback();
-        } finally {
-            em.close();
+    public boolean demandeCredit(double montant, double tauxAnnuel, int duree, double salaires, double chargeActuelle) {
+
+        if (montant < 250000) {
+            double tauxMensuel = (Math.pow((1 + tauxAnnuel / 100), (1.0 / 12)) - 1) * 100;
+            double chargeCreditSansTaux = (montant / duree);
+            double chargeCredit = chargeCreditSansTaux + (chargeCreditSansTaux * (tauxAnnuel / 100));
+            if ((chargeCredit + chargeActuelle) <= ((salaires / 100) * 40)) {
+                //enregistrer
+            }
         }
         
-        return null;
-    }*/
+        //envoyer sur le topic message à dest du superviseur
+        
+        
+        return false;
+    }
+
+    public int Demande_Credit(int idemp, int idclient, int montant, double taux, int Salaire, int duree, double charge) {
+
+        int C = montant;
+        double d = duree;
+        double i = taux;
+        i = i / 100;
+        i = i / 12;
+        System.out.println(montant + "--" + d + "--" + taux);
+        int value = (int) (((C * i) / (1 - (1 / Math.pow(1 + i, 12 * d)))) + 0.5);
+        int chargetotal = (int) (charge + value);
+        String credit = idemp + "#" + montant + "#" + taux + "#" + duree + "#" + Salaire + "#" + value + "#" + idclient;
+        if (chargetotal < (Salaire / 100 * 40) && montant < 250000) {
+
+        }
+        return 1;
+    }
 
     @Override
     @RolesAllowed("employe")

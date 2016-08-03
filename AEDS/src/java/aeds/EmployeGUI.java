@@ -19,13 +19,14 @@ import javax.swing.JOptionPane;
 public class EmployeGUI extends javax.swing.JFrame {
 
     private EJB1Remote eJB1;
+
     /**
      * Creates new form EmployeGUI
      */
     public EmployeGUI() {
         initComponents();
     }
-    
+
     public EmployeGUI(EJB1Remote eJB1) {
         initComponents();
         this.eJB1 = eJB1;
@@ -163,8 +164,10 @@ public class EmployeGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void demandeCreditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demandeCreditButtonActionPerformed
+        eJB1.demandeCredit(10000, 5, 36, 2000, 100);
+
         if (!montantTF.getText().isEmpty() || !tauxTF.getText().isEmpty() || !dureeTF.getText().isEmpty() || !chargeTF.getText().isEmpty()) {
-           /* BigDecimal compteSource = ((Comptes) mesComptesSourceCB.getSelectedItem()).getId();
+            /* BigDecimal compteSource = ((Comptes) mesComptesSourceCB.getSelectedItem()).getId();
             BigDecimal compteDestination;
             BigInteger montant = BigInteger.valueOf(Long.parseLong(montantTF.getText()));
 
