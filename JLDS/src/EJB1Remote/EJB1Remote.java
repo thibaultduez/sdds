@@ -20,5 +20,7 @@ public interface EJB1Remote {
     //List<Comptes> getComptesClient(BigDecimal clientId);
 
     boolean demandeCredit(long montant, long taux, long duree, java.util.List salaires, long chargeActuelle);
+
+    void loginEmploye();
     
 }

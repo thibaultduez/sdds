@@ -56,4 +56,9 @@ public class EJB1 implements EJB1Remote {
         
         return null;
     }*/
+
+    @Override
+    @RolesAllowed("employe")
+    public void loginEmploye() {
+    }
 }

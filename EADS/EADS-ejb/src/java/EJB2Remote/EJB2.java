@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.security.Principal;
 import java.util.List;
 import javax.annotation.Resource;
+import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
@@ -23,6 +24,7 @@ import javax.persistence.Persistence;
  * @author thibault
  */
 @Stateless
+@DeclareRoles("client")
 public class EJB2 implements EJB2Remote {
 
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("JLDSPU");

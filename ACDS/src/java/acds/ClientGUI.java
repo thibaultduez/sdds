@@ -201,7 +201,7 @@ public class ClientGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_autreCompteRBActionPerformed
 
     private void quitterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitterButtonActionPerformed
-        eJB2.closeEntityManagers();
+        //eJB2.closeEntityManagers();
         this.dispose();
     }//GEN-LAST:event_quitterButtonActionPerformed
 

@@ -21,6 +21,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        eJB1.loginEmploye();
+        
         EmployeGUI employeGUI = new EmployeGUI(eJB1);
         employeGUI.setVisible(true); 
     }

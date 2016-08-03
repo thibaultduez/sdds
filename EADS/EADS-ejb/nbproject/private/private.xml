@@ -6,7 +6,6 @@
             <file>file:/Users/thibault/NetBeansProjects/EADS/EADS-ejb/src/java/EJB1Remote/EJB1.java</file>
         </group>
         <group name="DS sysdis">
-            <file>file:/Users/thibault/NetBeansProjects/EADS/EADS-ejb/src/conf/glassfish-ejb-jar.xml</file>
             <file>file:/Users/thibault/NetBeansProjects/EADS/EADS-ejb/src/java/EJB2Remote/EJB2.java</file>
         </group>
     </open-files>
