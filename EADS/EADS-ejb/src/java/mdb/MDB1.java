@@ -20,7 +20,7 @@ import org.jboss.logging.Logger;
 @MessageDriven(activationConfig = {
     @ActivationConfigProperty(propertyName = "clientId", propertyValue = "jms/topic"),
     @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/topic"),
-    @ActivationConfigProperty(propertyName = "subscriptionDurability", propertyValue = "Durable"),
+    //@ActivationConfigProperty(propertyName = "subscriptionDurability", propertyValue = "Durable"),
     @ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "jms/topic"),
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
     @ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "toMDB1 = true")
