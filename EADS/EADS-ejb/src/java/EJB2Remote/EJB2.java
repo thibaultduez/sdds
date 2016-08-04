@@ -7,7 +7,6 @@ package EJB2Remote;
 
 import entities.*;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.security.Principal;
 import java.util.List;
 import javax.annotation.Resource;
@@ -92,7 +91,7 @@ public class EJB2 implements EJB2Remote {
     public boolean clientExist(long idClient) {
         try {
             Clients client = em.find(Clients.class, BigDecimal.valueOf(idClient));
-            return true;
+            return client != null;
         } catch (Exception e) {
             e.printStackTrace();
             return false;

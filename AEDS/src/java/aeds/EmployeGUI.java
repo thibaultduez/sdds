@@ -31,19 +31,19 @@ import util.CurrentTimeId;
  *
  * @author kevinschorkops
  */
-public class EmployeGUI extends javax.swing.JFrame implements MessageListener{
+public class EmployeGUI extends javax.swing.JFrame implements MessageListener {
 
     private String loginEmploye;
     private DefaultListModel attenteListModel;
     private DefaultListModel traiteListModel;
-    
+
     private EJB1Remote eJB1;
     private EJB2Remote eJB2;
-    
+
     private Topic topic;
     private Connection connection;
     private Session session;
-    
+
     private MessageProducer producer;
     private MessageConsumer consumer;
 
@@ -56,26 +56,26 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener{
 
     public EmployeGUI(String loginEmploye, EJB1Remote eJB1, EJB2Remote eJB2, Topic topic, Connection connection, Session session) {
         initComponents();
-        
+
         attenteListModel = new DefaultListModel<>();
         traiteListModel = new DefaultListModel<>();
         attenteList.setModel(attenteListModel);
         traiteList.setModel(traiteListModel);
-        
+
         this.loginEmploye = loginEmploye;
-        
+
         this.eJB1 = eJB1;
         this.eJB2 = eJB2;
-        
+
         this.topic = topic;
         this.connection = connection;
         this.session = session;
-        
+
         try {
             consumer = session.createConsumer(topic, loginEmploye);
             consumer.setMessageListener(this);
             producer = session.createProducer(topic);
-        } catch(JMSException e) {
+        } catch (JMSException e) {
             e.printStackTrace();
         }
     }
@@ -233,7 +233,7 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener{
 
     private void demandeCreditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demandeCreditButtonActionPerformed
         if (!idClientTF.getText().isEmpty() && !montantTF.getText().isEmpty() && !tauxTF.getText().isEmpty() && !dureeTF.getText().isEmpty() && !salaireTF.getText().isEmpty() && !chargeTF.getText().isEmpty()) {
-            if(eJB2.clientExist(Long.parseLong(idClientTF.getText()))) {
+            if (eJB2.clientExist(Long.parseLong(idClientTF.getText()))) {
                 Credits credit = new Credits();
                 credit.setId(BigDecimal.valueOf(CurrentTimeId.nextId()));
                 credit.setMontant(Double.parseDouble(montantTF.getText()));
@@ -244,12 +244,12 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener{
                 Clients client = new Clients();
                 client.setId(BigDecimal.valueOf(Long.parseLong(idClientTF.getText())));
                 credit.setRefClient(client);
-                
-                eJB1.demandeCredit(loginEmploye, credit);
+
                 attenteListModel.addElement(credit);
+                eJB1.demandeCredit(loginEmploye, credit);
                 clearGUI();
             } else {
-                JOptionPane.showMessageDialog(null, "Le client n'existe pas !", "Erreur idClient" , JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Le client n'existe pas !", "Erreur idClient", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_demandeCreditButtonActionPerformed
@@ -317,34 +317,30 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener{
         try {
             TextMessage tm = (TextMessage) message;
             String[] parts = tm.getText().split("#");
-            
+
             BigDecimal idCredit = BigDecimal.valueOf(Long.parseLong(parts[0]));
             boolean accorde = Boolean.parseBoolean(parts[1]);
-            
-            boolean j = false;
+
+            boolean flag = false;
             Credits credit = null;
-            for(int i = 0; j != true; i++) {
+            for (int i = 0; flag != true && i < attenteListModel.size(); i++) {
                 credit = (Credits) attenteListModel.getElementAt(i);
-                if(credit.getId().equals(idCredit)) {
+                if (credit.getId().equals(idCredit)) {
                     attenteListModel.remove(i);
-                    j = true;
+                    flag = true;
                 }
             }
-            
-            if(accorde) {
+
+            if (accorde) {
                 traiteListModel.addElement(credit + " ACCORDE");
             } else {
                 traiteListModel.addElement(credit + " REFUSE");
             }
-            
-            
-            
-            System.out.println("BLBLBLBL : " + tm.getText());
         } catch (JMSException ex) {
             Logger.getLogger(EmployeGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void clearGUI() {
         idClientTF.setText("");
         montantTF.setText("");
