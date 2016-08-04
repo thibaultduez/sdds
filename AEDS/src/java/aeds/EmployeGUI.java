@@ -79,13 +79,10 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener{
         dureeLabel = new javax.swing.JLabel();
         dureeTF = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        salairesTF = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        salairesList = new javax.swing.JList<>();
-        addSalaireButton = new javax.swing.JButton();
+        salaireTF = new javax.swing.JTextField();
         chargeLabel = new javax.swing.JLabel();
         chargeTF = new javax.swing.JTextField();
-        salairesLabel = new javax.swing.JLabel();
+        salaireLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -106,59 +103,45 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener{
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Demande de crédit");
 
-        jScrollPane1.setViewportView(salairesList);
+        chargeLabel.setText("Charge totale actuelle :");
 
-        addSalaireButton.setText("Ajouter salaire");
-        addSalaireButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addSalaireButtonActionPerformed(evt);
-            }
-        });
-
-        chargeLabel.setText("Charge actuelle :");
-
-        salairesLabel.setText("Salaire(s) :");
+        salaireLabel.setText("Salaire total :");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(248, 248, 248)
+                .addGap(173, 173, 173)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 176, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(68, 68, 68)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(chargeLabel)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(185, 185, 185)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(chargeTF, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                                .addComponent(chargeTF)
                                 .addComponent(tauxLabel, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(montantLabel, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(montantTF, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(tauxTF, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(dureeLabel, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(dureeTF, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(salairesTF, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(salairesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(demandeCreditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(addSalaireButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(39, 39, 39)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39))))
+                                .addComponent(salaireTF, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(salaireLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(chargeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(230, 230, 230)
+                        .addComponent(demandeCreditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addGap(15, 15, 15)
                 .addComponent(jLabel1)
-                .addGap(40, 40, 40)
+                .addGap(35, 35, 35)
                 .addComponent(montantLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(montantTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -170,24 +153,17 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener{
                 .addComponent(dureeLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dureeTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(salaireLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(salairesLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(salairesTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(addSalaireButton)))
+                .addComponent(salaireTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(chargeLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chargeTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addComponent(demandeCreditButton)
-                .addGap(33, 33, 33))
+                .addGap(38, 38, 38))
         );
 
         pack();
@@ -216,10 +192,6 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener{
             }*/
         }
     }//GEN-LAST:event_demandeCreditButtonActionPerformed
-
-    private void addSalaireButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSalaireButtonActionPerformed
-        //ad in salairesList
-    }//GEN-LAST:event_addSalaireButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -257,19 +229,16 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addSalaireButton;
     private javax.swing.JLabel chargeLabel;
     private javax.swing.JTextField chargeTF;
     private javax.swing.JButton demandeCreditButton;
     private javax.swing.JLabel dureeLabel;
     private javax.swing.JTextField dureeTF;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel montantLabel;
     private javax.swing.JTextField montantTF;
-    private javax.swing.JLabel salairesLabel;
-    private javax.swing.JList<String> salairesList;
-    private javax.swing.JTextField salairesTF;
+    private javax.swing.JLabel salaireLabel;
+    private javax.swing.JTextField salaireTF;
     private javax.swing.JLabel tauxLabel;
     private javax.swing.JTextField tauxTF;
     // End of variables declaration//GEN-END:variables
