@@ -64,7 +64,7 @@ public class EJB2 implements EJB2Remote {
 
     @Override
     @RolesAllowed("client")
-    public boolean transfert(BigDecimal idCompteSource, BigDecimal idCompteDestination, BigDecimal montant) {
+    public boolean transfert(BigDecimal idCompteSource, BigDecimal idCompteDestination, Double montant) {
         //bloquer
         
         try {
@@ -73,8 +73,8 @@ public class EJB2 implements EJB2Remote {
 
             if (compteSource.getSolde().compareTo(montant) >= 0) {
                 em.getTransaction().begin();
-                compteSource.setSolde(compteSource.getSolde().subtract(montant));
-                compteDestination.setSolde(compteDestination.getSolde().add(montant));
+                compteSource.setSolde(compteSource.getSolde() - montant);
+                compteDestination.setSolde(compteDestination.getSolde() + montant);
             } else {
                 return false;
             }

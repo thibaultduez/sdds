@@ -23,7 +23,7 @@ public interface EJB2Remote {
 
     void closeEntityManagers();
 
-    boolean transfert(BigDecimal idCompteSource, BigDecimal idCompteDestination, BigDecimal montant);
+    boolean transfert(BigDecimal idCompteSource, BigDecimal idCompteDestination, Double montant);
 
     boolean clientExist(long idClient);
 }

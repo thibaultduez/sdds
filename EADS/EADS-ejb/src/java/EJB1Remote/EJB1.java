@@ -20,7 +20,6 @@ import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
-import util.CurrentTimeId;
 
 /**
  *
@@ -41,15 +40,16 @@ public class EJB1 implements EJB1Remote {
     private SessionContext sessionContext;
 
     @Override
+    @RolesAllowed("employe")
     public boolean demandeCredit(String loginEmploye, Credits credit) {
         String message = "";
 
-        if (credit.getMontant().doubleValue() < 250000) {
-            double tauxMensuel = (Math.pow((1 + credit.getTaux().doubleValue() / 100), (1.0 / 12)) - 1) * 100;
-            double chargeCreditSansTaux = (credit.getMontant().doubleValue() / credit.getDuree().intValue());
-            double chargeCredit = chargeCreditSansTaux + (chargeCreditSansTaux * (credit.getTaux().doubleValue() / 100));
+        if (credit.getMontant() < 250000) {
+            double tauxMensuel = (Math.pow((1 + credit.getTaux() / 100), (1.0 / 12)) - 1) * 100;
+            double chargeCreditSansTaux = (credit.getMontant() / credit.getDuree());
+            double chargeCredit = chargeCreditSansTaux + (chargeCreditSansTaux * (credit.getTaux() / 100));
 
-            if ((chargeCredit + credit.getChargeCredit().doubleValue()) <= ((credit.getSalaire().doubleValue() / 100) * 40)) {
+            if ((chargeCredit + credit.getChargeCredit()) <= ((credit.getSalaire() / 100) * 40)) {
                 //message = credit.getId() + "#" + credit.getMontant() + "#" + credit.getTaux() + "#" + credit.getDuree() + "#" + credit.getSalaire() + "#" + (credit.getChargeCredit().doubleValue() + chargeCredit) + "#" + credit.getRefClient().getId() + "#true";
                 message = credit.getId() + "#" + "true";
                 try {

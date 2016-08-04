@@ -44,7 +44,7 @@ public class Comptes implements Serializable {
     @Column(name = "ID")
     private BigDecimal id;
     @Column(name = "SOLDE")
-    private BigDecimal solde;
+    private Double solde;
     @JoinColumn(name = "REF_CLIENT", referencedColumnName = "ID")
     @ManyToOne
     private Clients refClient;
@@ -64,11 +64,11 @@ public class Comptes implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getSolde() {
+    public Double getSolde() {
         return solde;
     }
 
-    public void setSolde(BigDecimal solde) {
+    public void setSolde(Double solde) {
         this.solde = solde;
     }
 
@@ -102,7 +102,7 @@ public class Comptes implements Serializable {
 
     @Override
     public String toString() {
-        return id + " : " + solde + "€";
+        return id + " : " + String.format("%.2f", solde) + "€";
     }
     
 }

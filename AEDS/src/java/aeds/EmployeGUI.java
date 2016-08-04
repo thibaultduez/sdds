@@ -236,11 +236,11 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener{
             if(eJB2.clientExist(Long.parseLong(idClientTF.getText()))) {
                 Credits credit = new Credits();
                 credit.setId(BigDecimal.valueOf(CurrentTimeId.nextId()));
-                credit.setMontant(BigDecimal.valueOf(Long.parseLong(montantTF.getText())));
-                credit.setTaux(BigDecimal.valueOf(Long.parseLong(tauxTF.getText())));
-                credit.setDuree(BigInteger.valueOf(Long.parseLong(dureeTF.getText())));
-                credit.setSalaire(BigDecimal.valueOf(Long.parseLong(salaireTF.getText())));
-                credit.setChargeCredit(BigDecimal.valueOf(Long.parseLong(chargeTF.getText())));
+                credit.setMontant(Double.parseDouble(montantTF.getText()));
+                credit.setTaux(Double.parseDouble(tauxTF.getText()));
+                credit.setDuree(Integer.parseInt(dureeTF.getText()));
+                credit.setSalaire(Double.parseDouble(salaireTF.getText()));
+                credit.setChargeCredit(Double.parseDouble(chargeTF.getText()));
                 Clients client = new Clients();
                 client.setId(BigDecimal.valueOf(Long.parseLong(idClientTF.getText())));
                 credit.setRefClient(client);

@@ -49,17 +49,17 @@ public class Credits implements Serializable {
     @Column(name = "ID")
     private BigDecimal id;
     @Column(name = "MONTANT")
-    private BigDecimal montant;
+    private Double montant;
     @Column(name = "TAUX")
-    private BigDecimal taux;
+    private Double taux;
     @Column(name = "DUREE")
-    private BigInteger duree;
+    private Integer duree;
     @Column(name = "SALAIRE")
-    private BigDecimal salaire;
+    private Double salaire;
     @Column(name = "CHARGE_CREDIT")
-    private BigDecimal chargeCredit;
+    private Double chargeCredit;
     @Column(name = "ACCORDE")
-    private boolean accorde;
+    private Boolean accorde;
     @JoinColumn(name = "REF_CLIENT", referencedColumnName = "ID")
     @ManyToOne
     private Clients refClient;
@@ -79,43 +79,43 @@ public class Credits implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getMontant() {
+    public Double getMontant() {
         return montant;
     }
 
-    public void setMontant(BigDecimal montant) {
+    public void setMontant(Double montant) {
         this.montant = montant;
     }
 
-    public BigDecimal getTaux() {
+    public Double getTaux() {
         return taux;
     }
 
-    public void setTaux(BigDecimal taux) {
+    public void setTaux(Double taux) {
         this.taux = taux;
     }
 
-    public BigInteger getDuree() {
+    public Integer getDuree() {
         return duree;
     }
 
-    public void setDuree(BigInteger duree) {
+    public void setDuree(Integer duree) {
         this.duree = duree;
     }
 
-    public BigDecimal getSalaire() {
+    public Double getSalaire() {
         return salaire;
     }
 
-    public void setSalaire(BigDecimal salaire) {
+    public void setSalaire(Double salaire) {
         this.salaire = salaire;
     }
 
-    public BigDecimal getChargeCredit() {
+    public Double getChargeCredit() {
         return chargeCredit;
     }
 
-    public void setChargeCredit(BigDecimal chargeCredit) {
+    public void setChargeCredit(Double chargeCredit) {
         this.chargeCredit = chargeCredit;
     }
 
@@ -157,7 +157,7 @@ public class Credits implements Serializable {
 
     @Override
     public String toString() {
-        return refClient.getId() + " - " + montant + "€, " + taux + "%, " + duree + " mois";
+        return refClient.getId() + " - " + String.format("%.2f", montant) + "€, " + String.format("%.2f", taux) + "%, " + duree + " mois";
     }
     
 }
