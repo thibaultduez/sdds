@@ -209,7 +209,7 @@ public class ClientGUI extends javax.swing.JFrame {
         if (!montantTF.getText().isEmpty() || (autreCompteRB.isSelected() && !autreCompteTF.getText().isEmpty())) {
             BigDecimal compteSource = ((Comptes) mesComptesSourceCB.getSelectedItem()).getId();
             BigDecimal compteDestination;
-            BigInteger montant = BigInteger.valueOf(Long.parseLong(montantTF.getText()));
+            BigDecimal montant = BigDecimal.valueOf(Long.parseLong(montantTF.getText()));
             if (mesComptesRB.isSelected()) {
                 compteDestination = ((Comptes) mesComptesDestinationCB.getSelectedItem()).getId();
             } else {

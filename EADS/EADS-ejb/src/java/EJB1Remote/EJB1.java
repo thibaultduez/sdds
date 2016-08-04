@@ -5,11 +5,14 @@
  */
 package EJB1Remote;
 
+import entities.Credits;
+import java.security.Principal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.JMSConnectionFactory;
@@ -17,6 +20,7 @@ import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
+import util.CurrentTimeId;
 
 /**
  *
@@ -33,35 +37,47 @@ public class EJB1 implements EJB1Remote {
     @JMSConnectionFactory("jms/topicFactory")
     private JMSContext context;
 
-    @Override
-    public boolean demandeCredit(double montant, double tauxAnnuel, int duree, double salaires, double chargeActuelle) {
+    @Resource
+    private SessionContext sessionContext;
 
-        try {
-            TextMessage tm = context.createTextMessage("BITE POILS couilles");
-            tm.setBooleanProperty("toEmploye", true);
+    @Override
+    public boolean demandeCredit(String loginEmploye, Credits credit) {
+        String message = "";
+
+        if (credit.getMontant().doubleValue() < 250000) {
+            double tauxMensuel = (Math.pow((1 + credit.getTaux().doubleValue() / 100), (1.0 / 12)) - 1) * 100;
+            double chargeCreditSansTaux = (credit.getMontant().doubleValue() / credit.getDuree().intValue());
+            double chargeCredit = chargeCreditSansTaux + (chargeCreditSansTaux * (credit.getTaux().doubleValue() / 100));
+
+            if ((chargeCredit + credit.getChargeCredit().doubleValue()) <= ((credit.getSalaire().doubleValue() / 100) * 40)) {
+                //message = credit.getId() + "#" + credit.getMontant() + "#" + credit.getTaux() + "#" + credit.getDuree() + "#" + credit.getSalaire() + "#" + (credit.getChargeCredit().doubleValue() + chargeCredit) + "#" + credit.getRefClient().getId() + "#true";
+                message = credit.getId() + "#" + "true";
+                try {
+                    TextMessage tm = context.createTextMessage(message);
+                    tm.setBooleanProperty(loginEmploye, true);
+                    sendJMSMessageToTopic(tm);
+                } catch (JMSException ex) {
+                    Logger.getLogger(EJB1.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+        /*try {
+            TextMessage tm = context.createTextMessage(message);
+            tm.setBooleanProperty("toMDB", true);
             sendJMSMessageToTopic(tm);
         } catch (JMSException ex) {
             Logger.getLogger(EJB1.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        /*if (montant < 250000) {
-            double tauxMensuel = (Math.pow((1 + tauxAnnuel / 100), (1.0 / 12)) - 1) * 100;
-            double chargeCreditSansTaux = (montant / duree);
-            double chargeCredit = chargeCreditSansTaux + (chargeCreditSansTaux * (tauxAnnuel / 100));
-            if ((chargeCredit + chargeActuelle) <= ((salaires / 100) * 40)) {
-                //enregistrer
-            }
         }*/
-        
-        //envoyer sur le topic message à dest du superviseur
-        
         
         return false;
     }
 
     @Override
     @RolesAllowed("employe")
-    public void loginEmploye() {
+    public String getLoginEmploye() {
+        Principal callerPrincipal = sessionContext.getCallerPrincipal();
+        return callerPrincipal.getName();
     }
 
     private void sendJMSMessageToTopic(TextMessage messageData) {

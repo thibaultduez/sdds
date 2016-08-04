@@ -6,17 +6,13 @@
 package aeds;
 
 import EJB1Remote.EJB1Remote;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import EJB2Remote.EJB2Remote;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageProducer;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.jms.Topic;
 
 /**
@@ -33,6 +29,8 @@ public class Main {
     
     @EJB
     private static EJB1Remote eJB1;
+    @EJB
+    private static EJB2Remote eJB2;
     
     private static Connection connection = null;
     private static Session session = null;
@@ -49,38 +47,9 @@ public class Main {
             e.printStackTrace();
         }
         
-        eJB1.loginEmploye();
+        String loginEmploye = eJB1.getLoginEmploye();
         
-        EmployeGUI employeGUI = new EmployeGUI(eJB1, topic, connection, session);
+        EmployeGUI employeGUI = new EmployeGUI(loginEmploye, eJB1, eJB2, topic, connection, session);
         employeGUI.setVisible(true); 
-    }
-
-    private Message createJMSMessageForjmsTopic(Session session, Object messageData) throws JMSException {
-        // TODO create and populate message to send
-        TextMessage tm = session.createTextMessage();
-        tm.setText(messageData.toString());
-        return tm;
-    }
-
-    private void sendJMSMessageToTopic(Object messageData) throws JMSException {
-        Connection connection = null;
-        Session session = null;
-        try {
-            connection = topicFactory.createConnection();
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            MessageProducer messageProducer = session.createProducer(topic);
-            messageProducer.send(createJMSMessageForjmsTopic(session, messageData));
-        } finally {
-            if (session != null) {
-                try {
-                    session.close();
-                } catch (JMSException e) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Cannot close session", e);
-                }
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
     }
 }

@@ -64,7 +64,7 @@ public class EJB2 implements EJB2Remote {
 
     @Override
     @RolesAllowed("client")
-    public boolean transfert(BigDecimal idCompteSource, BigDecimal idCompteDestination, BigInteger montant) {
+    public boolean transfert(BigDecimal idCompteSource, BigDecimal idCompteDestination, BigDecimal montant) {
         //bloquer
         
         try {
@@ -86,5 +86,16 @@ public class EJB2 implements EJB2Remote {
         }
         //debloquer
         return true;
+    }
+
+    @Override
+    public boolean clientExist(long idClient) {
+        try {
+            Clients client = em.find(Clients.class, BigDecimal.valueOf(idClient));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

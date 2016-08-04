@@ -49,17 +49,17 @@ public class Credits implements Serializable {
     @Column(name = "ID")
     private BigDecimal id;
     @Column(name = "MONTANT")
-    private BigInteger montant;
+    private BigDecimal montant;
     @Column(name = "TAUX")
-    private BigInteger taux;
+    private BigDecimal taux;
     @Column(name = "DUREE")
     private BigInteger duree;
     @Column(name = "SALAIRE")
-    private BigInteger salaire;
+    private BigDecimal salaire;
     @Column(name = "CHARGE_CREDIT")
-    private BigInteger chargeCredit;
+    private BigDecimal chargeCredit;
     @Column(name = "ACCORDE")
-    private BigInteger accorde;
+    private boolean accorde;
     @JoinColumn(name = "REF_CLIENT", referencedColumnName = "ID")
     @ManyToOne
     private Clients refClient;
@@ -79,19 +79,19 @@ public class Credits implements Serializable {
         this.id = id;
     }
 
-    public BigInteger getMontant() {
+    public BigDecimal getMontant() {
         return montant;
     }
 
-    public void setMontant(BigInteger montant) {
+    public void setMontant(BigDecimal montant) {
         this.montant = montant;
     }
 
-    public BigInteger getTaux() {
+    public BigDecimal getTaux() {
         return taux;
     }
 
-    public void setTaux(BigInteger taux) {
+    public void setTaux(BigDecimal taux) {
         this.taux = taux;
     }
 
@@ -103,27 +103,27 @@ public class Credits implements Serializable {
         this.duree = duree;
     }
 
-    public BigInteger getSalaire() {
+    public BigDecimal getSalaire() {
         return salaire;
     }
 
-    public void setSalaire(BigInteger salaire) {
+    public void setSalaire(BigDecimal salaire) {
         this.salaire = salaire;
     }
 
-    public BigInteger getChargeCredit() {
+    public BigDecimal getChargeCredit() {
         return chargeCredit;
     }
 
-    public void setChargeCredit(BigInteger chargeCredit) {
+    public void setChargeCredit(BigDecimal chargeCredit) {
         this.chargeCredit = chargeCredit;
     }
 
-    public BigInteger getAccorde() {
+    public boolean getAccorde() {
         return accorde;
     }
 
-    public void setAccorde(BigInteger accorde) {
+    public void setAccorde(boolean accorde) {
         this.accorde = accorde;
     }
 
@@ -157,7 +157,7 @@ public class Credits implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Credits[ id=" + id + " ]";
+        return refClient.getId() + " - " + montant + "€, " + taux + "%, " + duree + " mois";
     }
     
 }

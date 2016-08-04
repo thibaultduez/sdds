@@ -6,6 +6,7 @@
 package EJB1Remote;
 
 import entities.Comptes;
+import entities.Credits;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Remote;
@@ -17,8 +18,8 @@ import javax.ejb.Remote;
 @Remote
 public interface EJB1Remote {
 
-    boolean demandeCredit(double montant, double tauxAnnuel, int duree, double salaires, double chargeActuelle);
+    boolean demandeCredit(String loginEmploye, Credits credit);
 
-    void loginEmploye();
+    String getLoginEmploye();
     
 }
