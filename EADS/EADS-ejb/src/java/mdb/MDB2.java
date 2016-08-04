@@ -34,7 +34,7 @@ public class MDB2 implements MessageListener {
     public void onMessage(Message message) {
         try {
             TextMessage tm = (TextMessage) message;
-            System.out.println("message : " + tm.getText());
+            System.out.println("message MDB2 : " + tm.getText());
         } catch(JMSException e) {
             Logger.getLogger(MDB1.class.getName()).log(Logger.Level.ERROR, null, e);
         }

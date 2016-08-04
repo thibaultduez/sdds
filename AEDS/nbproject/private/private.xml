@@ -6,8 +6,14 @@
             <file>file:/Users/kevinschorkops/Desktop/INPRES-3/SysDis/sdds/AEDS/src/java/aeds/Main.java</file>
             <file>file:/Users/kevinschorkops/Desktop/INPRES-3/SysDis/sdds/AEDS/src/java/aeds/EmployeGUI.java</file>
         </group>
+<<<<<<< 5e183d8b3d3252481771b4b828cdef7c4fe3af5c
         <group name="sdds">
             <file>file:/Users/kevinschorkops/Desktop/INPRES-3/SysDis/sdds/AEDS/src/java/aeds/EmployeGUI.java</file>
+=======
+        <group name="DS sysdis">
+            <file>file:/Users/thibault/NetBeansProjects/AEDS/src/java/aeds/EmployeGUI.java</file>
+            <file>file:/Users/thibault/NetBeansProjects/AEDS/src/java/aeds/Main.java</file>
+>>>>>>> EJB1 - DemandeCredit - OK
         </group>
     </open-files>
 </project-private>

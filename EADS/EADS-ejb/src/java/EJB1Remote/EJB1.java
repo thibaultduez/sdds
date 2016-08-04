@@ -42,35 +42,33 @@ public class EJB1 implements EJB1Remote {
     @Override
     @RolesAllowed("employe")
     public boolean demandeCredit(String loginEmploye, Credits credit) {
-        String message = "";
+        TextMessage tm = null;
 
-        if (credit.getMontant() < 250000) {
-            double tauxMensuel = (Math.pow((1 + credit.getTaux() / 100), (1.0 / 12)) - 1) * 100;
-            double chargeCreditSansTaux = (credit.getMontant() / credit.getDuree());
-            double chargeCredit = chargeCreditSansTaux + (chargeCreditSansTaux * (credit.getTaux() / 100));
+        double tauxMensuel = (Math.pow((1 + credit.getTaux() / 100), (1.0 / 12)) - 1) * 100;
+        double chargeCreditSansTaux = (credit.getMontant() / credit.getDuree());
+        double chargeCredit = chargeCreditSansTaux + (chargeCreditSansTaux * (credit.getTaux() / 100));
 
-            if ((chargeCredit + credit.getChargeCredit()) <= ((credit.getSalaire() / 100) * 40)) {
-                //message = credit.getId() + "#" + credit.getMontant() + "#" + credit.getTaux() + "#" + credit.getDuree() + "#" + credit.getSalaire() + "#" + (credit.getChargeCredit().doubleValue() + chargeCredit) + "#" + credit.getRefClient().getId() + "#true";
-                message = credit.getId() + "#" + "true";
-                try {
-                    TextMessage tm = context.createTextMessage(message);
-                    tm.setBooleanProperty(loginEmploye, true);
-                    sendJMSMessageToTopic(tm);
-                } catch (JMSException ex) {
-                    Logger.getLogger(EJB1.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        String message = credit.getId() + "#" + credit.getMontant() + "#" + credit.getTaux() + "#" + credit.getDuree() + "#" + credit.getSalaire() + "#" + (credit.getChargeCredit() + chargeCredit) + "#" + credit.getRefClient().getId();
+
+        try {
+            if (credit.getMontant() < 250000 && (chargeCredit + credit.getChargeCredit()) <= ((credit.getSalaire() / 100) * 40)) {
+                tm = context.createTextMessage(message + "#true");
+                tm.setBooleanProperty("toMDB1", true);
+                tm.setBooleanProperty("toMDB2", true);
+                tm.setBooleanProperty(loginEmploye, true);
+            } else {
+                tm = context.createTextMessage(message + "#false" + "#" + loginEmploye);
+                tm.setBooleanProperty("toMDB1", true);
+                tm.setBooleanProperty("toMDB2", true);
+                tm.setBooleanProperty("toSuperviseur", true);
             }
-        }
 
-        /*try {
-            TextMessage tm = context.createTextMessage(message);
-            tm.setBooleanProperty("toMDB", true);
             sendJMSMessageToTopic(tm);
         } catch (JMSException ex) {
             Logger.getLogger(EJB1.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        
-        return false;
+            return false;
+        }
+        return true;
     }
 
     @Override

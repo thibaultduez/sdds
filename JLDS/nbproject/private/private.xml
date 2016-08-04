@@ -11,10 +11,13 @@
             <file>file:/Users/thibault/NetBeansProjects/JLDS/src/entities/Credits.java</file>
         </group>
         <group name="DS sysdis">
+            <file>file:/Users/thibault/NetBeansProjects/JLDS/src/entities/Logs.java</file>
             <file>file:/Users/thibault/NetBeansProjects/JLDS/src/entities/Comptes.java</file>
+            <file>file:/Users/thibault/NetBeansProjects/JLDS/src/EJB1Remote/EJB1Remote.java</file>
             <file>file:/Users/thibault/NetBeansProjects/JLDS/src/EJB2Remote/EJB2Remote.java</file>
-            <file>file:/Users/thibault/NetBeansProjects/JLDS/src/entities/Clients.java</file>
             <file>file:/Users/thibault/NetBeansProjects/JLDS/src/META-INF/persistence.xml</file>
+            <file>file:/Users/thibault/NetBeansProjects/JLDS/src/entities/Clients.java</file>
+            <file>file:/Users/thibault/NetBeansProjects/JLDS/src/util/CurrentTimeId.java</file>
             <file>file:/Users/thibault/NetBeansProjects/JLDS/src/entities/Credits.java</file>
         </group>
         <group name="sdds">

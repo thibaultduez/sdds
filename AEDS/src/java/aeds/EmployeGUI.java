@@ -246,7 +246,9 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener {
                 credit.setRefClient(client);
 
                 attenteListModel.addElement(credit);
-                eJB1.demandeCredit(loginEmploye, credit);
+                if(!eJB1.demandeCredit(loginEmploye, credit)) {
+                    attenteListModel.removeElement(credit);
+                }
                 clearGUI();
             } else {
                 JOptionPane.showMessageDialog(null, "Le client n'existe pas !", "Erreur idClient", JOptionPane.ERROR_MESSAGE);
@@ -319,7 +321,7 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener {
             String[] parts = tm.getText().split("#");
 
             BigDecimal idCredit = BigDecimal.valueOf(Long.parseLong(parts[0]));
-            boolean accorde = Boolean.parseBoolean(parts[1]);
+            boolean accorde = Boolean.parseBoolean(parts[7]);
 
             boolean flag = false;
             Credits credit = null;
