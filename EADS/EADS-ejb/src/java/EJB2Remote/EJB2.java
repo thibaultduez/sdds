@@ -26,8 +26,8 @@ import javax.persistence.Persistence;
 @DeclareRoles("client")
 public class EJB2 implements EJB2Remote {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("JLDSPU");
-    private EntityManager em = emf.createEntityManager();
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("JLDSPU");
+    EntityManager em = emf.createEntityManager();
 
     @Resource
     private SessionContext context;

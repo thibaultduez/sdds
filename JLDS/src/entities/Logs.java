@@ -41,7 +41,7 @@ public class Logs implements Serializable {
     @NotNull
     @Column(name = "ID")
     private BigDecimal id;
-    @Size(max = 100)
+    @Size(max = 500)
     @Column(name = "INFOS")
     private String infos;
 

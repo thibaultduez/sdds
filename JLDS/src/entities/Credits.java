@@ -43,11 +43,10 @@ public class Credits implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID")
-    private BigDecimal id;
+    private Long id;
     @Column(name = "MONTANT")
     private Double montant;
     @Column(name = "TAUX")
@@ -67,15 +66,15 @@ public class Credits implements Serializable {
     public Credits() {
     }
 
-    public Credits(BigDecimal id) {
+    public Credits(Long id) {
         this.id = id;
     }
 
-    public BigDecimal getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -5,12 +5,16 @@
  */
 package mdb;
 
+import entities.Logs;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import org.jboss.logging.Logger;
 
 /**
@@ -27,6 +31,9 @@ import org.jboss.logging.Logger;
 })
 public class MDB1 implements MessageListener {
     
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("JLDSPU");
+    EntityManager em = emf.createEntityManager();
+    
     public MDB1() {
     }
     
@@ -34,9 +41,17 @@ public class MDB1 implements MessageListener {
     public void onMessage(Message message) {
         try {
             TextMessage tm = (TextMessage) message;
-            System.out.println("message MDB1 : " + tm.getText());
-        } catch(JMSException e) {
+            
+            em.getTransaction().begin();
+            
+            Logs log = new Logs();
+            log.setInfos(tm.getText());
+            em.persist(log);
+            
+            em.getTransaction().commit();
+        } catch(Exception e) {
             Logger.getLogger(MDB1.class.getName()).log(Logger.Level.ERROR, null, e);
+            em.getTransaction().rollback();
         }
     }
     

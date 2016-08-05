@@ -235,7 +235,7 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener {
         if (!idClientTF.getText().isEmpty() && !montantTF.getText().isEmpty() && !tauxTF.getText().isEmpty() && !dureeTF.getText().isEmpty() && !salaireTF.getText().isEmpty() && !chargeTF.getText().isEmpty()) {
             if (eJB2.clientExist(Long.parseLong(idClientTF.getText()))) {
                 Credits credit = new Credits();
-                credit.setId(BigDecimal.valueOf(CurrentTimeId.nextId()));
+                credit.setId(CurrentTimeId.nextId());
                 credit.setMontant(Double.parseDouble(montantTF.getText()));
                 credit.setTaux(Double.parseDouble(tauxTF.getText()));
                 credit.setDuree(Integer.parseInt(dureeTF.getText()));
@@ -319,9 +319,18 @@ public class EmployeGUI extends javax.swing.JFrame implements MessageListener {
         try {
             TextMessage tm = (TextMessage) message;
             String[] parts = tm.getText().split("#");
+            
+            Long idCredit;
+            boolean accorde;
 
-            BigDecimal idCredit = BigDecimal.valueOf(Long.parseLong(parts[0]));
-            boolean accorde = Boolean.parseBoolean(parts[7]);
+            if(parts[0].equals("auto_accorde")) {
+                idCredit = Long.parseLong(parts[1]);
+                accorde = Boolean.parseBoolean(parts[8]);
+            } else {
+                idCredit = Long.parseLong(parts[1]);
+                accorde = Boolean.parseBoolean(parts[2]);
+            }
+            
 
             boolean flag = false;
             Credits credit = null;

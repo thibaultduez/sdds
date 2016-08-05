@@ -48,16 +48,16 @@ public class EJB1 implements EJB1Remote {
         double chargeCreditSansTaux = (credit.getMontant() / credit.getDuree());
         double chargeCredit = chargeCreditSansTaux + (chargeCreditSansTaux * (credit.getTaux() / 100));
 
-        String message = credit.getId() + "#" + credit.getMontant() + "#" + credit.getTaux() + "#" + credit.getDuree() + "#" + credit.getSalaire() + "#" + (credit.getChargeCredit() + chargeCredit) + "#" + credit.getRefClient().getId();
+        String message ="#" + credit.getId() + "#" + credit.getMontant() + "#" + credit.getTaux() + "#" + credit.getDuree() + "#" + credit.getSalaire() + "#" + (credit.getChargeCredit() + chargeCredit) + "#" + credit.getRefClient().getId();
 
         try {
             if (credit.getMontant() < 250000 && (chargeCredit + credit.getChargeCredit()) <= ((credit.getSalaire() / 100) * 40)) {
-                tm = context.createTextMessage(message + "#true");
+                tm = context.createTextMessage("auto_accorde" + message + "#true");
                 tm.setBooleanProperty("toMDB1", true);
                 tm.setBooleanProperty("toMDB2", true);
                 tm.setBooleanProperty(loginEmploye, true);
             } else {
-                tm = context.createTextMessage(message + "#false" + "#" + loginEmploye);
+                tm = context.createTextMessage("demande" + message + "#false" + "#" + loginEmploye);
                 tm.setBooleanProperty("toMDB1", true);
                 tm.setBooleanProperty("toMDB2", true);
                 tm.setBooleanProperty("toSuperviseur", true);
