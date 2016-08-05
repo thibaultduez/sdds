@@ -79,6 +79,13 @@ public class EJB1 implements EJB1Remote {
         Principal callerPrincipal = sessionContext.getCallerPrincipal();
         return callerPrincipal.getName();
     }
+    
+    @Override
+    @RolesAllowed("superviseur")
+    public String getLoginSuperviseur() {
+        Principal callerPrincipal = sessionContext.getCallerPrincipal();
+        return callerPrincipal.getName();
+    }
 
     private void sendJMSMessageToTopic(TextMessage messageData) {
         context.createProducer().send(topic, messageData);

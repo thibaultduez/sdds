@@ -45,6 +45,7 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
     private MessageConsumer consumer;
 
     private ArrayList<Credits> credits;
+    private Double montantTransactions;
 
     /**
      * Creates new form SuperviseurGUI
@@ -171,8 +172,11 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
                                     .addComponent(montantLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(montantTF)))))
+                                    .addComponent(montantTF)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jLabel1)
+                                        .addGap(0, 0, Short.MAX_VALUE))))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(135, 135, 135)
                         .addComponent(validerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -216,7 +220,7 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
         Credits selectedCredit = credits.get(i);
         selectedCredit.setAccorde(true);
 
-        //eJB1.repondreCredit(loginSuperviseur, selectedCredit);
+        //eJB1.reponseVerifCredit(loginSuperviseur, selectedCredit);
         credits.remove(i);
 
         refreshTable();
@@ -231,7 +235,7 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
         Credits selectedCredit = credits.get(i);
         selectedCredit.setAccorde(false);
 
-        //eJB1.repondreCredit(loginSuperviseur, selectedCredit);
+        //eJB1.reponseVerifCredit(loginSuperviseur, selectedCredit);
         credits.remove(i);
 
         refreshTable();
@@ -292,52 +296,65 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
             TextMessage tm = (TextMessage) message;
             String[] parts = tm.getText().split("#");
 
-            BigDecimal idCredit = BigDecimal.valueOf(Long.parseLong(parts[0]));
-            boolean accorde = Boolean.parseBoolean(parts[1]);
-
-            boolean flag = false;
-            Credits credit = null;
-           /* for (int i = 0; flag != true && i < attenteListModel.size(); i++) {
-                credit = (Credits) attenteListModel.getElementAt(i);
-                if (credit.getId().equals(idCredit)) {
-                    attenteListModel.remove(i);
-                    flag = true;
+            //transaction#34
+            if(parts[0].equals("transaction")) {
+                addTransaction(parts);
+            } else {
+                //demande#id#montant#taux#duree#salaire#charge#refClient#accorde#loginEmploye
+                if (parts[0].equals("demande")) {
+                    addDemandeCredit(parts);
+                } else {
+                    //accorde#id#montant#taux#duree#salaire#charge#refClient#accorde#loginEmploye
+                    if (parts[0].equals("accorde")) {
+                        addCreditAccorde(parts);
+                    }
                 }
             }
-
-            if (accorde) {
-                traiteListModel.addElement(credit + " ACCORDE");
-            } else {
-                traiteListModel.addElement(credit + " REFUSE");
-            }*/
+            
         } catch (JMSException ex) {
             Logger.getLogger(SuperviseurGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void addCredit(String message) {
-        String[] parts = message.split("#");
-
+    private void addTransaction(String[] parts)
+    {
+        montantTransactions += Double.parseDouble(parts[1]);
+        montantTF.setText(montantTransactions.toString());
+    }
+    
+    private void addDemandeCredit(String[] parts) {
+        //type#id#montant#taux#duree#salaire#charge#refClient#accorde#loginEmploye
         Credits credit = new Credits();
-
-        //employe#montant#charge#duree#salaire#taux#idClient
-        credit.setId(BigDecimal.valueOf(Long.parseLong(parts[0])));
-        credit.setMontant(Double.parseDouble(parts[1]));
-        credit.setTaux(Double.parseDouble(parts[2]));
-        credit.setDuree(Integer.parseInt(parts[3]));
-        credit.setSalaire(Double.parseDouble(parts[4]));
-        credit.setChargeCredit(Double.parseDouble(parts[5]));
-        credit.setAccorde(Boolean.parseBoolean(parts[6]));
+        credit.setId(BigDecimal.valueOf(Long.parseLong(parts[1])));
+        credit.setMontant(Double.parseDouble(parts[2]));
+        credit.setTaux(Double.parseDouble(parts[3]));
+        credit.setDuree(Integer.parseInt(parts[4]));
+        credit.setSalaire(Double.parseDouble(parts[5]));
+        credit.setChargeCredit(Double.parseDouble(parts[6]));
         Clients client = new Clients();
         client.setId(BigDecimal.valueOf(Long.parseLong(parts[7])));
         credit.setRefClient(client);
-
+        credit.setAccorde(Boolean.parseBoolean(parts[8]));
         credits.add(credit);
+        
         refreshTable();
     }
-
-    private void clearGUI() {
-
+    
+    private void addCreditAccorde(String[] parts) {
+        //type#id#montant#taux#duree#salaire#charge#refClient#accorde#loginEmploye
+        Credits credit = new Credits();
+        credit.setId(BigDecimal.valueOf(Long.parseLong(parts[1])));
+        credit.setMontant(Double.parseDouble(parts[2]));
+        credit.setTaux(Double.parseDouble(parts[3]));
+        credit.setDuree(Integer.parseInt(parts[4]));
+        credit.setSalaire(Double.parseDouble(parts[5]));
+        credit.setChargeCredit(Double.parseDouble(parts[6]));
+        Clients client = new Clients();
+        client.setId(BigDecimal.valueOf(Long.parseLong(parts[7])));
+        credit.setRefClient(client);
+        credit.setAccorde(Boolean.parseBoolean(parts[8]));
+        
+        accordeListModel.addElement(credit);
     }
 
     private void refreshTable() {

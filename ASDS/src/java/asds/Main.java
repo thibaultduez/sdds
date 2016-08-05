@@ -46,7 +46,7 @@ public class Main {
             e.printStackTrace();
         }
         
-        String loginSuperviseur = eJB1.getLoginEmploye();
+        String loginSuperviseur = eJB1.getLoginSuperviseur();
         
         SuperviseurGUI superviseurGUI = new SuperviseurGUI(loginSuperviseur, eJB1, eJB2, topic, connection, session);
         superviseurGUI.setVisible(true); 

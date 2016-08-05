@@ -21,5 +21,5 @@ public interface EJB1Remote {
     boolean demandeCredit(String loginEmploye, Credits credit);
 
     String getLoginEmploye();
-    
+    String getLoginSuperviseur();
 }
