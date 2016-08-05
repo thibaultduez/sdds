@@ -45,7 +45,8 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
     private MessageConsumer consumer;
 
     private ArrayList<Credits> credits;
-    private Double montantTransactions;
+    private ArrayList<String> employes;
+    private double montantTransactions = 0;
 
     /**
      * Creates new form SuperviseurGUI
@@ -56,6 +57,9 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
 
     public SuperviseurGUI(String loginSuperviseur, EJB1Remote eJB1, EJB2Remote eJB2, Topic topic, Connection connection, Session session) {
         initComponents();
+        
+        credits = new ArrayList<>();
+        employes = new ArrayList<>();
 
         accordeListModel = new DefaultListModel<>();
         accordeList.setModel(accordeListModel);
@@ -71,7 +75,7 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
         this.session = session;
 
         try {
-            consumer = session.createConsumer(topic, "toSup");
+            consumer = session.createConsumer(topic, "toSuperviseur");
             consumer.setMessageListener(this);
             producer = session.createProducer(topic);
         } catch (JMSException e) {
@@ -124,7 +128,7 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Long.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Long.class
+                java.lang.Long.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false
@@ -216,12 +220,13 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
         if (i == -1) {
             return;
         }
-
+        
         Credits selectedCredit = credits.get(i);
         selectedCredit.setAccorde(true);
-
-        //eJB1.reponseVerifCredit(loginSuperviseur, selectedCredit);
+        
+        eJB1.reponseVerifCredit(employes.get(i), selectedCredit);
         credits.remove(i);
+        employes.remove(i);
 
         refreshTable();
     }//GEN-LAST:event_validerButtonActionPerformed
@@ -235,8 +240,9 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
         Credits selectedCredit = credits.get(i);
         selectedCredit.setAccorde(false);
 
-        //eJB1.reponseVerifCredit(loginSuperviseur, selectedCredit);
+        eJB1.reponseVerifCredit(employes.get(i), selectedCredit);
         credits.remove(i);
+        employes.remove(i);
 
         refreshTable();
     }//GEN-LAST:event_refuserButtonActionPerformed
@@ -295,33 +301,27 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
         try {
             TextMessage tm = (TextMessage) message;
             String[] parts = tm.getText().split("#");
-
             //transaction#34
-            if(parts[0].equals("transaction")) {
+            if (parts[0].equals("transaction")) {
                 addTransaction(parts);
-            } else {
+            } else if (parts[0].equals("demande")) {
                 //demande#id#montant#taux#duree#salaire#charge#refClient#accorde#loginEmploye
-                if (parts[0].equals("demande")) {
-                    addDemandeCredit(parts);
-                } else {
-                    //accorde#id#montant#taux#duree#salaire#charge#refClient#accorde#loginEmploye
-                    if (parts[0].equals("accorde")) {
-                        addCreditAccorde(parts);
-                    }
-                }
+                addDemandeCredit(parts);
+            } else if (parts[0].equals("auto_accorde")) {
+                //accorde#id#montant#taux#duree#salaire#charge#refClient#accorde#loginEmploye
+                addCreditAccorde(parts);
             }
-            
+
         } catch (JMSException ex) {
             Logger.getLogger(SuperviseurGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void addTransaction(String[] parts)
-    {
+    private void addTransaction(String[] parts) {
         montantTransactions += Double.parseDouble(parts[1]);
-        montantTF.setText(montantTransactions.toString());
+        montantTF.setText(String.format("%.2f", montantTransactions));
     }
-    
+
     private void addDemandeCredit(String[] parts) {
         //type#id#montant#taux#duree#salaire#charge#refClient#accorde#loginEmploye
         Credits credit = new Credits();
@@ -336,10 +336,10 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
         credit.setRefClient(client);
         credit.setAccorde(Boolean.parseBoolean(parts[8]));
         credits.add(credit);
-        
+        employes.add(parts[9]);
         refreshTable();
     }
-    
+
     private void addCreditAccorde(String[] parts) {
         //type#id#montant#taux#duree#salaire#charge#refClient#accorde#loginEmploye
         Credits credit = new Credits();
@@ -353,7 +353,7 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
         client.setId(BigDecimal.valueOf(Long.parseLong(parts[7])));
         credit.setRefClient(client);
         credit.setAccorde(Boolean.parseBoolean(parts[8]));
-        
+
         accordeListModel.addElement(credit);
     }
 
@@ -363,20 +363,20 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
         while (model.getRowCount() > 0) {
             model.removeRow(0);
         }
-
+        
         int i = 0;
         for (Credits credit : credits) {
             model.addRow(new Object[]{
-                credit.getId().toString(),
-                credit.getMontant().toString(),
-                credit.getTaux().toString(),
-                credit.getDuree().toString(),
-                credit.getSalaire().toString(),
-                credit.getChargeCredit().toString(),
-                credit.getRefClient().getId().toString()
+                credit.getId(),
+                credit.getMontant(),
+                credit.getTaux(),
+                credit.getDuree(),
+                credit.getSalaire(),
+                credit.getChargeCredit(),
+                credit.getRefClient().getId()
             });
         }
-
-        attenteTable.repaint();
+        
+        //attenteTable.repaint();
     }
 }

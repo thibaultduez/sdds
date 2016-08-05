@@ -48,13 +48,14 @@ public class EJB1 implements EJB1Remote {
         double chargeCreditSansTaux = (credit.getMontant() / credit.getDuree());
         double chargeCredit = chargeCreditSansTaux + (chargeCreditSansTaux * (credit.getTaux() / 100));
 
-        String message ="#" + credit.getId() + "#" + credit.getMontant() + "#" + credit.getTaux() + "#" + credit.getDuree() + "#" + credit.getSalaire() + "#" + (credit.getChargeCredit() + chargeCredit) + "#" + credit.getRefClient().getId();
+        String message = "#" + credit.getId() + "#" + credit.getMontant() + "#" + credit.getTaux() + "#" + credit.getDuree() + "#" + credit.getSalaire() + "#" + (credit.getChargeCredit() + chargeCredit) + "#" + credit.getRefClient().getId();
 
         try {
             if (credit.getMontant() < 250000 && (chargeCredit + credit.getChargeCredit()) <= ((credit.getSalaire() / 100) * 40)) {
                 tm = context.createTextMessage("auto_accorde" + message + "#true");
                 tm.setBooleanProperty("toMDB1", true);
                 tm.setBooleanProperty("toMDB2", true);
+                tm.setBooleanProperty("toSuperviseur", true);
                 tm.setBooleanProperty(loginEmploye, true);
             } else {
                 tm = context.createTextMessage("demande" + message + "#false" + "#" + loginEmploye);
@@ -77,7 +78,7 @@ public class EJB1 implements EJB1Remote {
         Principal callerPrincipal = sessionContext.getCallerPrincipal();
         return callerPrincipal.getName();
     }
-    
+
     @Override
     @RolesAllowed("superviseur")
     public String getLoginSuperviseur() {
@@ -87,5 +88,30 @@ public class EJB1 implements EJB1Remote {
 
     private void sendJMSMessageToTopic(TextMessage messageData) {
         context.createProducer().send(topic, messageData);
+    }
+
+    @Override
+    @RolesAllowed("superviseur")
+    public boolean reponseVerifCredit(String employe, Credits credit) {
+        TextMessage tm = null;
+
+        try {
+            if (credit.isAccorde()) {
+                tm = context.createTextMessage("valid#" + credit.getId() + "#true");
+                tm.setBooleanProperty("toMDB1", true);
+                tm.setBooleanProperty("toMDB2", true);
+                tm.setBooleanProperty(employe, true);
+            } else {
+                tm = context.createTextMessage("valid#" + credit.getId() + "#false");
+                tm.setBooleanProperty("toMDB1", true);
+                tm.setBooleanProperty(employe, true);
+            }
+
+            sendJMSMessageToTopic(tm);
+        } catch (JMSException ex) {
+            Logger.getLogger(EJB1.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return true;
     }
 }

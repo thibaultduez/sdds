@@ -152,7 +152,7 @@
                 <Column editable="false" title="Duree" type="java.lang.Integer"/>
                 <Column editable="false" title="Salaire" type="java.lang.Double"/>
                 <Column editable="false" title="Charge" type="java.lang.Double"/>
-                <Column editable="false" title="IdClient" type="java.lang.Long"/>
+                <Column editable="false" title="IdClient" type="java.lang.Object"/>
               </Table>
             </Property>
           </Properties>

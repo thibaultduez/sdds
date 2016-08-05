@@ -5,15 +5,24 @@
  */
 package EJB2Remote;
 
+import EJB1Remote.EJB1;
 import entities.*;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.jms.JMSConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
+import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -26,16 +35,23 @@ import javax.persistence.Persistence;
 @DeclareRoles("client")
 public class EJB2 implements EJB2Remote {
 
+    @Resource(mappedName = "jms/topic")
+    private Topic topic;
+
+    @Inject
+    @JMSConnectionFactory("jms/topicFactory")
+    private JMSContext context;
+
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("JLDSPU");
     EntityManager em = emf.createEntityManager();
 
     @Resource
-    private SessionContext context;
+    private SessionContext sessionContext;
 
     @Override
     @RolesAllowed("client")
     public List<Comptes> getComptesClient() {
-        Principal callerPrincipal = context.getCallerPrincipal();
+        Principal callerPrincipal = sessionContext.getCallerPrincipal();
         String login = callerPrincipal.getName();
         Clients cli = (Clients) em.createNamedQuery("Clients.findByLogin").setParameter("login", login).getSingleResult();
         return cli.getComptesList();
@@ -45,7 +61,7 @@ public class EJB2 implements EJB2Remote {
     @Override
     @RolesAllowed("client")
     public Clients verifLogin() {
-        Principal callerPrincipal = context.getCallerPrincipal();
+        Principal callerPrincipal = sessionContext.getCallerPrincipal();
         String login = callerPrincipal.getName();
         try {
             return (Clients) em.createNamedQuery("Clients.findByLogin").setParameter("login", login).getSingleResult();
@@ -65,7 +81,6 @@ public class EJB2 implements EJB2Remote {
     @RolesAllowed("client")
     public boolean transfert(BigDecimal idCompteSource, BigDecimal idCompteDestination, Double montant) {
         //bloquer
-        
         try {
             Comptes compteSource = em.find(Comptes.class, idCompteSource);
             Comptes compteDestination = em.find(Comptes.class, idCompteDestination);
@@ -74,6 +89,12 @@ public class EJB2 implements EJB2Remote {
                 em.getTransaction().begin();
                 compteSource.setSolde(compteSource.getSolde() - montant);
                 compteDestination.setSolde(compteDestination.getSolde() + montant);
+
+                TextMessage tm = context.createTextMessage("transaction#" + montant + "#" + compteSource.getId() + "#" + compteDestination.getId());
+                tm.setBooleanProperty("toMDB1", true);
+                tm.setBooleanProperty("toSuperviseur", true);
+
+                sendJMSMessageToTopic(tm);
             } else {
                 return false;
             }
@@ -96,5 +117,9 @@ public class EJB2 implements EJB2Remote {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private void sendJMSMessageToTopic(TextMessage messageData) {
+        context.createProducer().send(topic, messageData);
     }
 }

@@ -118,7 +118,7 @@ public class Credits implements Serializable {
         this.chargeCredit = chargeCredit;
     }
 
-    public boolean getAccorde() {
+    public boolean isAccorde() {
         return accorde;
     }
 

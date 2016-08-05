@@ -6,6 +6,9 @@
 package mdb;
 
 import entities.Logs;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
@@ -30,29 +33,32 @@ import org.jboss.logging.Logger;
     @ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "toMDB1 = true")
 })
 public class MDB1 implements MessageListener {
-    
+
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("JLDSPU");
     EntityManager em = emf.createEntityManager();
-    
+
     public MDB1() {
     }
-    
+
     @Override
     public void onMessage(Message message) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        
         try {
             TextMessage tm = (TextMessage) message;
-            
+
             em.getTransaction().begin();
-            
+
             Logs log = new Logs();
-            log.setInfos(tm.getText());
+            log.setInfos(sdf.format(calendar.getTime()) + " : " + tm.getText());
             em.persist(log);
-            
+
             em.getTransaction().commit();
-        } catch(Exception e) {
+        } catch (Exception e) {
             Logger.getLogger(MDB1.class.getName()).log(Logger.Level.ERROR, null, e);
             em.getTransaction().rollback();
         }
     }
-    
+
 }

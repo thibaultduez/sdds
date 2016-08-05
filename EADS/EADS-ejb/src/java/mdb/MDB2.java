@@ -58,6 +58,11 @@ public class MDB2 implements MessageListener {
                 credit.setAccorde(Boolean.parseBoolean(parts[8]));
 
                 saveCredit(credit);
+            } else if(parts[0].equals("valid")) {
+                if(parts[2].equals("true")) {
+                    accordCredit(Long.parseLong(parts[1]));
+                }
+                
             }
         } catch (JMSException e) {
             Logger.getLogger(MDB1.class.getName()).log(Logger.Level.ERROR, null, e);
@@ -74,7 +79,20 @@ public class MDB2 implements MessageListener {
             Logger.getLogger(MDB2.class.getName()).log(Logger.Level.ERROR, null, e);
             em.getTransaction().rollback();
         }
+    }
+    
+    private void accordCredit(Long creditId) {
+        try {
+            em.getTransaction().begin();
 
+            Credits credit = em.find(Credits.class, creditId);
+            credit.setAccorde(true);
+            
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            Logger.getLogger(MDB2.class.getName()).log(Logger.Level.ERROR, null, e);
+            em.getTransaction().rollback();
+        }
     }
 
 }

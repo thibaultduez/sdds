@@ -22,4 +22,6 @@ public interface EJB1Remote {
 
     String getLoginEmploye();
     String getLoginSuperviseur();
+
+    boolean reponseVerifCredit(String employe, Credits credit);
 }
