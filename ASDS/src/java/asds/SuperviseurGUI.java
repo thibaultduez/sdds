@@ -325,7 +325,7 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
     private void addDemandeCredit(String[] parts) {
         //type#id#montant#taux#duree#salaire#charge#refClient#accorde#loginEmploye
         Credits credit = new Credits();
-        credit.setId(BigDecimal.valueOf(Long.parseLong(parts[1])));
+        credit.setId(Long.parseLong(parts[1]));
         credit.setMontant(Double.parseDouble(parts[2]));
         credit.setTaux(Double.parseDouble(parts[3]));
         credit.setDuree(Integer.parseInt(parts[4]));
@@ -343,7 +343,7 @@ public class SuperviseurGUI extends javax.swing.JFrame implements MessageListene
     private void addCreditAccorde(String[] parts) {
         //type#id#montant#taux#duree#salaire#charge#refClient#accorde#loginEmploye
         Credits credit = new Credits();
-        credit.setId(BigDecimal.valueOf(Long.parseLong(parts[1])));
+        credit.setId(Long.parseLong(parts[1]));
         credit.setMontant(Double.parseDouble(parts[2]));
         credit.setTaux(Double.parseDouble(parts[3]));
         credit.setDuree(Integer.parseInt(parts[4]));
